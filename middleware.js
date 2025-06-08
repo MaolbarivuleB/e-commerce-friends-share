@@ -8,7 +8,10 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
 
   try {
-    const verified = jwt.verify(token, 'secretKey');  // Use your secret key here or from env
+    const verified = jwt.verify(token, 'secretKey'); 
+    
+    
+    // Use your secret key here or from env
     req.user = verified;
     next();
   } catch (err) {

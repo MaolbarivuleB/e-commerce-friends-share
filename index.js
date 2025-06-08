@@ -3,10 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const app = express();
+const bcrypt = require('bcryptjs');
 
 const authenticateToken = require('./middleware');
 
 const middleware = require('./middleware');
+const User = require('../models/user')
+
+
 
 app.use(express.json());
 
@@ -222,6 +226,35 @@ app.get('/orders', authenticateToken, async (req, res) => {
   } catch (err) {
     res.status(400).send(err.message);
   }
+});
+
+
+
+
+const saltRounds = 10;
+const plainPassword = 'securepassword';
+
+// Hash the password
+bcrypt.hash(plainPassword, saltRounds, (err, hash) => {
+    if (err) {
+        console.error('Error hashing password:', err);
+    } else {
+        console.log('Hashed password:', hash);
+    }
+});
+
+
+
+const hashedPassword = ' $2b$10$5ui3Eybfj95489gAU5s4fe3NbqMLXHqc9kPlHmLsBX5wf1sf2g/Ge'; // Replace with a hashed password from your database
+
+bcrypt.compare(plainPassword, hashedPassword, (err, result) => {
+    if (err) {
+        console.error('Error comparing password:', err);
+    } else if (result) {
+        console.log('Password matches!');
+    } else {
+        console.log('Password does not match.');
+    }
 });
 
 
